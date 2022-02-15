@@ -15,6 +15,7 @@ public class NPC : MonoBehaviour, IInteraction
     public void Interaction()
     {
         Debug.Log("상점 구매창 열기");
+        ShopManager.Instance.OpenShop();
     }
 
     public string GetName()

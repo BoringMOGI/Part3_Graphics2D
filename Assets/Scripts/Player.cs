@@ -10,7 +10,7 @@ public enum VECTOR
    Right,
 }
 
-public class Player : MonoBehaviour
+public class Player : Singleton<Player>
 {
     readonly Vector2[] vectors = new Vector2[] {
        Vector2.up,
@@ -28,9 +28,26 @@ public class Player : MonoBehaviour
     void Start()
     {
         anim = GetComponent<Animator>();
+        SwitchControl(true);
     }
 
-    public void OnSubmit()
+    public void SwitchControl(bool isUnlock)
+    {
+        if (isUnlock)
+        {
+            InputManager.Instance.OnInputDown += OnMovement;
+            InputManager.Instance.OnSubmit += OnSubmit;
+            InputManager.Instance.OnCancel += OnCancel;            
+        }
+        else
+        {
+            InputManager.Instance.OnInputDown -= OnMovement;
+            InputManager.Instance.OnSubmit -= OnSubmit;
+            InputManager.Instance.OnCancel -= OnCancel;
+        }
+    }
+
+    private void OnSubmit()
     {
         if (isMoving)
             return;
@@ -43,7 +60,11 @@ public class Player : MonoBehaviour
         if (target != null)
             target.Interaction();
     }
-    public void OnMovement(VECTOR input)
+    private void OnCancel()
+    {
+
+    }
+    private void OnMovement(VECTOR input)
     {
         if (isMoving)
             return;
@@ -60,7 +81,7 @@ public class Player : MonoBehaviour
         // 이동 시작.
         StartCoroutine(Movement(input));
     }
-    IEnumerator Movement(VECTOR vector)
+    private IEnumerator Movement(VECTOR vector)
     {
         // 도착지점을 계산 후 이동.
         if (RayToVector(vector) == null)

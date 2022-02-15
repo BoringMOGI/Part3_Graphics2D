@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class ShopItem : MonoBehaviour, IButtonHandler
+public class ShopItem : Button
 {
     [SerializeField] Image itemImage;       // 이미지.
     [SerializeField] Image selectedImage;   // 선택 이미지.
@@ -12,28 +12,21 @@ public class ShopItem : MonoBehaviour, IButtonHandler
     [SerializeField] Text countText;        // 개수.
     [SerializeField] Text ownedText;        // 보유 개수.
     [SerializeField] Text priceText;        // 가격.
-    [SerializeField] ButtonOf buttons;      // 방향에 따른 버튼들.
 
     public void Setup()
     {
         OnDeselect();
     }
-    public void OnSelect()
+    public override void OnSelect()
     {
         selectedImage.enabled = true;
     }
-    public void OnDeselect()
+    public override void OnDeselect()
     {
         selectedImage.enabled = false;
     }
-
-    public void OnSubmit()
+    public override void OnSubmit()
     {
 
-    }
-
-    public IButtonHandler GetButtonOf(VECTOR v)
-    {
-        return buttons.GetButtonOf(v);
     }
 }
