@@ -34,7 +34,7 @@ public class ShopManager : MonoBehaviour
             shopItemList.Add(newItem);
         }
 
-        SelectManager.Instance.SetCurrentObject(shopItemList[0].gameObject);
+        SelectManager.Instance.SetButton(shopItemList[0]);
     }
 
 }

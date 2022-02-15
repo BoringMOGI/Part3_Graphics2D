@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class ShopItem : MonoBehaviour, ISelectHandler, IDeselectHandler
+public class ShopItem : MonoBehaviour, IButtonHandler
 {
     [SerializeField] Image itemImage;       // 이미지.
     [SerializeField] Image selectedImage;   // 선택 이미지.
@@ -12,21 +12,28 @@ public class ShopItem : MonoBehaviour, ISelectHandler, IDeselectHandler
     [SerializeField] Text countText;        // 개수.
     [SerializeField] Text ownedText;        // 보유 개수.
     [SerializeField] Text priceText;        // 가격.
+    [SerializeField] ButtonOf buttons;      // 방향에 따른 버튼들.
 
     public void Setup()
     {
-        OnDeselect(null);
+        OnDeselect();
     }
-
-    // event system의 current object에 등록되면 자동으로 호출.
-    public void OnSelect(BaseEventData eventData)
+    public void OnSelect()
     {
         selectedImage.enabled = true;
     }
-
-    // event system의 current object에서 등록 해제 되면 자동으로 호출.
-    public void OnDeselect(BaseEventData eventData)
+    public void OnDeselect()
     {
         selectedImage.enabled = false;
+    }
+
+    public void OnSubmit()
+    {
+
+    }
+
+    public IButtonHandler GetButtonOf(VECTOR v)
+    {
+        return buttons.GetButtonOf(v);
     }
 }

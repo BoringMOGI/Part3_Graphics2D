@@ -6,16 +6,10 @@ using UnityEngine.EventSystems;
 
 public class UIButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
-    [SerializeField] Player.VECTOR vector;
+    [SerializeField] VECTOR vector;
     [SerializeField] UnityEvent<int> OnMobileInput;
     
     bool isSelected = false;    // 누르는 중인가?
-
-    void Start()
-    {
-
-    }
-
 
     void IPointerDownHandler.OnPointerDown(PointerEventData eventData)
     {

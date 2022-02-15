@@ -2,57 +2,56 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum VECTOR
+{
+   Up,
+   Down,
+   Left,
+   Right,
+}
+
 public class Player : MonoBehaviour
 {
-    public enum VECTOR
-    {
-        None,
-        Left,
-        Right,
-        Up,
-        Down,
-    }
     readonly Vector2[] vectors = new Vector2[] {
-        new Vector2(0,0),
-        new Vector2(-1,0),      // 왼쪽.
-        new Vector2(+1,0),      // 오른쪽.
-        new Vector2(0,+1),      // 위쪽.
-        new Vector2(0,-1),      // 아래쪽.
+       Vector2.up,
+       Vector2.down,
+       Vector2.left,
+       Vector2.right
     };
 
     [SerializeField] float moveSpeed = 5f;
 
     Animator anim;
-    Rigidbody2D rigid;
-
+    VECTOR beforeInput = 0;
     bool isMoving = false;
 
     void Start()
     {
         anim = GetComponent<Animator>();
-        rigid = GetComponent<Rigidbody2D>();
     }
 
-    VECTOR beforeInput = VECTOR.None;
-
-    private Collider2D RayToVector(VECTOR vector)
-    {
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, vectors[(int)vector], 1f);
-        return hit.collider;
-    }
-
-    public void MobileInput(int vector)
+    public void OnSubmit()
     {
         if (isMoving)
             return;
 
-        // 들어온 입력을 VECTOR로 변환.
-        VECTOR input = (VECTOR)vector;
+        Collider2D node = RayToVector(beforeInput);
+        if (node == null)
+            return;
+
+        IInteraction target = node.GetComponent<IInteraction>();
+        if (target != null)
+            target.Interaction();
+    }
+    public void OnMovement(VECTOR input)
+    {
+        if (isMoving)
+            return;
 
         // 이전과 다른 방향으로 움직였으면 애니메이션 재생, 상호작용 UI닫기.
         if (input != beforeInput)
         {
-            anim.SetInteger("MoveVector", vector);
+            anim.SetInteger("MoveVector", (int)input);
             anim.SetTrigger("onMove");
 
             InteractionUI.Instance.Close();
@@ -80,7 +79,7 @@ public class Player : MonoBehaviour
         }
 
         // 목적지 도착 이후 이동 방향으로 레이 발사.
-        Collider2D collider = RayToVector(vector); 
+        Collider2D collider = RayToVector(vector);
         if (collider != null)
         {
             IInteraction target = collider.GetComponent<IInteraction>();
@@ -96,25 +95,11 @@ public class Player : MonoBehaviour
         beforeInput = vector;
     }
 
-    public void Submit()
+    private Collider2D RayToVector(VECTOR vector)
     {
-        Collider2D node = RayToVector(beforeInput);
-        if (node == null)
-            return;
-
-        IInteraction target = node.GetComponent<IInteraction>();
-        if (target != null)
-        {
-            target.Interaction();
-        }
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, vectors[(int)vector], 1f);
+        return hit.collider;
     }
-    public void Cancel()
-    {
-
-    }
-
-    
-
 }
 
 

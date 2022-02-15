@@ -1747,10 +1747,10 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 1324106688}
-  - {fileID: 1035208922}
   - {fileID: 1926140506}
   - {fileID: 261593452}
+  - {fileID: 1324106688}
+  - {fileID: 1035208922}
   - {fileID: 1284522291}
   - {fileID: 1382280937}
   m_Father: {fileID: 1790884899}
@@ -2462,7 +2462,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5367847824408075066, guid: edda963d030cc8f46a83f039d4efb84e, type: 3}
       propertyPath: m_RootOrder
-      value: 0
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5367847824408075066, guid: edda963d030cc8f46a83f039d4efb84e, type: 3}
       propertyPath: m_AnchorMax.x
@@ -2537,9 +2537,21 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8111433543785000996, guid: edda963d030cc8f46a83f039d4efb84e, type: 3}
+      propertyPath: vector
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8111433543785000996, guid: edda963d030cc8f46a83f039d4efb84e, type: 3}
       propertyPath: OnMobileInput.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 1134549905}
+      objectReference: {fileID: 2089962012}
+    - target: {fileID: 8111433543785000996, guid: edda963d030cc8f46a83f039d4efb84e, type: 3}
+      propertyPath: OnMobileInput.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: MobileInput
+      objectReference: {fileID: 0}
+    - target: {fileID: 8111433543785000996, guid: edda963d030cc8f46a83f039d4efb84e, type: 3}
+      propertyPath: OnMobileInput.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: InputManager, Assembly-CSharp
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: edda963d030cc8f46a83f039d4efb84e, type: 3}
 --- !u!224 &1324106688 stripped
@@ -2629,8 +2641,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1134549905}
-        m_TargetAssemblyTypeName: Player, Assembly-CSharp
+      - m_Target: {fileID: 2089962012}
+        m_TargetAssemblyTypeName: InputManager, Assembly-CSharp
         m_MethodName: Submit
         m_Mode: 1
         m_Arguments:
@@ -2766,7 +2778,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5367847824408075066, guid: edda963d030cc8f46a83f039d4efb84e, type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5367847824408075066, guid: edda963d030cc8f46a83f039d4efb84e, type: 3}
       propertyPath: m_AnchorMax.x
@@ -2854,15 +2866,19 @@ PrefabInstance:
       objectReference: {fileID: 1134549905}
     - target: {fileID: 8111433543785000996, guid: edda963d030cc8f46a83f039d4efb84e, type: 3}
       propertyPath: vector
-      value: 3
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8111433543785000996, guid: edda963d030cc8f46a83f039d4efb84e, type: 3}
       propertyPath: OnMobileInput.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 1134549905}
+      objectReference: {fileID: 2089962012}
     - target: {fileID: 8111433543785000996, guid: edda963d030cc8f46a83f039d4efb84e, type: 3}
       propertyPath: OnMobileInput.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: MobileInput
+      objectReference: {fileID: 0}
+    - target: {fileID: 8111433543785000996, guid: edda963d030cc8f46a83f039d4efb84e, type: 3}
+      propertyPath: OnMobileInput.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: InputManager, Assembly-CSharp
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: edda963d030cc8f46a83f039d4efb84e, type: 3}
@@ -2887,7 +2903,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5367847824408075066, guid: edda963d030cc8f46a83f039d4efb84e, type: 3}
       propertyPath: m_RootOrder
-      value: 3
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5367847824408075066, guid: edda963d030cc8f46a83f039d4efb84e, type: 3}
       propertyPath: m_AnchorMax.x
@@ -2967,12 +2983,20 @@ PrefabInstance:
       objectReference: {fileID: -1582703761720647702, guid: 1c9bc0d104c01934da10d4333b9dc48b, type: 3}
     - target: {fileID: 8111433543785000996, guid: edda963d030cc8f46a83f039d4efb84e, type: 3}
       propertyPath: vector
-      value: 4
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8111433543785000996, guid: edda963d030cc8f46a83f039d4efb84e, type: 3}
       propertyPath: OnMobileInput.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 1134549905}
+      objectReference: {fileID: 2089962012}
+    - target: {fileID: 8111433543785000996, guid: edda963d030cc8f46a83f039d4efb84e, type: 3}
+      propertyPath: OnMobileInput.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: MobileInput
+      objectReference: {fileID: 0}
+    - target: {fileID: 8111433543785000996, guid: edda963d030cc8f46a83f039d4efb84e, type: 3}
+      propertyPath: OnMobileInput.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: InputManager, Assembly-CSharp
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: edda963d030cc8f46a83f039d4efb84e, type: 3}
 --- !u!1 &1610356266
@@ -3353,7 +3377,7 @@ GameObject:
   - component: {fileID: 1849351688}
   - component: {fileID: 1849351687}
   m_Layer: 0
-  m_Name: SelectManager
+  m_Name: ButtonManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5843,6 +5867,50 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2034317142}
   m_CullTransparentMesh: 1
+--- !u!1 &2089962010
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2089962011}
+  - component: {fileID: 2089962012}
+  m_Layer: 0
+  m_Name: InputManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2089962011
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2089962010}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2089962012
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2089962010}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 990020e036ced8b4eb1561db4beb020b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 1134549905}
 --- !u!1001 &5367847823423722464
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5864,7 +5932,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5367847824408075066, guid: edda963d030cc8f46a83f039d4efb84e, type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 5367847824408075066, guid: edda963d030cc8f46a83f039d4efb84e, type: 3}
       propertyPath: m_AnchorMax.x
@@ -5942,25 +6010,21 @@ PrefabInstance:
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: -8667803144176668281, guid: 1c9bc0d104c01934da10d4333b9dc48b, type: 3}
-    - target: {fileID: 5367847824408075070, guid: edda963d030cc8f46a83f039d4efb84e, type: 3}
-      propertyPath: vector
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 5367847824408075070, guid: edda963d030cc8f46a83f039d4efb84e, type: 3}
-      propertyPath: OnMobileInput.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 1134549905}
     - target: {fileID: 8111433543785000996, guid: edda963d030cc8f46a83f039d4efb84e, type: 3}
       propertyPath: vector
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 8111433543785000996, guid: edda963d030cc8f46a83f039d4efb84e, type: 3}
       propertyPath: OnMobileInput.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 1134549905}
+      objectReference: {fileID: 2089962012}
     - target: {fileID: 8111433543785000996, guid: edda963d030cc8f46a83f039d4efb84e, type: 3}
       propertyPath: OnMobileInput.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: MobileInput
+      objectReference: {fileID: 0}
+    - target: {fileID: 8111433543785000996, guid: edda963d030cc8f46a83f039d4efb84e, type: 3}
+      propertyPath: OnMobileInput.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: InputManager, Assembly-CSharp
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: edda963d030cc8f46a83f039d4efb84e, type: 3}
