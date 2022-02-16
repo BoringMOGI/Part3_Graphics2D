@@ -7,7 +7,7 @@ public interface IButtonHandler
     void OnSelect();            // 선택 되었을 때.
     void OnDeselect();          // 비선택 되었을 때.
     void OnSubmit();            // 버튼을 눌렀을 때.
-    IButtonHandler GetButtonOf(VECTOR v);
+    Button GetButtonOf(VECTOR v);
 }
 
 [System.Serializable]
@@ -43,7 +43,7 @@ public abstract class Button : MonoBehaviour, IButtonHandler
         }
     }
 
-    public IButtonHandler GetButtonOf(VECTOR v)
+    public Button GetButtonOf(VECTOR v)
     {
         switch (v)
         {
@@ -66,17 +66,9 @@ public abstract class Button : MonoBehaviour, IButtonHandler
 
 public class SelectManager : MonoBehaviour
 {
-    static SelectManager instance;
-    public static SelectManager Instance => instance;
+    protected Button current;
 
-    IButtonHandler current;
-
-    private void Awake()
-    {
-        instance = this;
-    }
-
-    public void SetButton(IButtonHandler target)
+    protected virtual void SetButton(Button target)
     {
         if (target == null)
             return;
@@ -98,7 +90,7 @@ public class SelectManager : MonoBehaviour
         current = target;
         current.OnSelect();
     }
-    public void ClearButton()
+    protected virtual void ClearButton()
     {
         if(current != null)
             current.OnDeselect();
@@ -111,20 +103,20 @@ public class SelectManager : MonoBehaviour
         InputManager.Instance.OnCancel -= CancelButton;
     }
 
-    public void MoveButton(VECTOR v)
+    protected virtual void MoveButton(VECTOR v)
     {
         if (current == null)
             return;
 
         // vector에 해당하는 다음 버튼이 있다면
-        IButtonHandler nextButton = current.GetButtonOf(v);
+        Button nextButton = current.GetButtonOf(v);
         if(nextButton != null)
         {
             // 그것을 선택.
             SetButton(nextButton);
         }
     }
-    public void SubmitButton()
+    protected virtual void SubmitButton()
     {
         if (current == null)
             return;
@@ -132,7 +124,7 @@ public class SelectManager : MonoBehaviour
         // 클릭.
         current.OnSubmit();
     }
-    public void CancelButton()
+    protected virtual void CancelButton()
     {
 
     }

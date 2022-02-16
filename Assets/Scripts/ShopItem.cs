@@ -17,6 +17,7 @@ public class ShopItem : Button
     {
         OnDeselect();
     }
+
     public override void OnSelect()
     {
         selectedImage.enabled = true;

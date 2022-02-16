@@ -4,10 +4,11 @@ using UnityEngine;
 
 public enum VECTOR
 {
-   Up,
-   Down,
-   Left,
-   Right,
+    None = -1,
+    Up,
+    Down,
+    Left,
+    Right,
 }
 
 public class Player : Singleton<Player>
@@ -22,7 +23,7 @@ public class Player : Singleton<Player>
     [SerializeField] float moveSpeed = 5f;
 
     Animator anim;
-    VECTOR beforeInput = 0;
+    VECTOR beforeInput = VECTOR.Down;
     bool isMoving = false;
 
     void Start()
