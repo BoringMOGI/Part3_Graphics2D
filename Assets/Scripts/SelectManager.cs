@@ -68,19 +68,27 @@ public class SelectManager : MonoBehaviour
 {
     protected Button current;
 
-    protected virtual void SetButton(Button target)
+    protected void SwitchInputEvent(bool isUnlock)
     {
-        if (target == null)
-            return;
-
-        // 최초에 버튼 세팅 시 이벤트 등록.
-        if(current == null)
+        if(isUnlock)
         {
             // 입력 매니저에게 자신의 이벤트 함수 등록.
             InputManager.Instance.OnInputUp += MoveButton;
             InputManager.Instance.OnSubmit += SubmitButton;
             InputManager.Instance.OnCancel += CancelButton;
         }
+        else
+        {
+            // 입력 매니저에게 자신의 이벤트 함수 등록 해제.
+            InputManager.Instance.OnInputUp -= MoveButton;
+            InputManager.Instance.OnSubmit -= SubmitButton;
+            InputManager.Instance.OnCancel -= CancelButton;
+        }
+    }
+    protected virtual void SetButton(Button target)
+    {
+        if (target == null)
+            return;
 
         // 이전 선택이 있다면 해제.
         if (current != null)
@@ -96,11 +104,6 @@ public class SelectManager : MonoBehaviour
             current.OnDeselect();
 
         current = null;
-
-        // 입력 매니저에게 자신의 이벤트 함수 등록 해제.
-        InputManager.Instance.OnInputUp -= MoveButton;
-        InputManager.Instance.OnSubmit -= SubmitButton;
-        InputManager.Instance.OnCancel -= CancelButton;
     }
 
     protected virtual void MoveButton(VECTOR v)
