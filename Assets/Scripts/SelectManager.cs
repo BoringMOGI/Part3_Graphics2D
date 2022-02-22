@@ -64,7 +64,8 @@ public abstract class Button : MonoBehaviour, IButtonHandler
     public abstract void OnSubmit();
 }
 
-public class SelectManager : MonoBehaviour
+public class SelectManager<T> : Singleton<T>
+    where T : MonoBehaviour
 {
     protected Button current;
 

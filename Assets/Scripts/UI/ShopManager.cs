@@ -2,11 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ShopManager : SelectManager
+public class ShopManager : SelectManager<ShopManager>
 {
-    static ShopManager instance;
-    public static ShopManager Instance => instance;
-
     [Header("Prefab")]
     [SerializeField] ShopItem prefab;
     [SerializeField] Transform itemParent;
@@ -24,10 +21,6 @@ public class ShopManager : SelectManager
 
     List<ShopItem> shopItemList = new List<ShopItem>();
 
-    private void Awake()
-    {
-        instance = this;
-    }
     private void Start()
     {
         panel.SetActive(false);
@@ -118,7 +111,7 @@ public class ShopManager : SelectManager
 
         // 매개변수는 무명 메소드(함수)로써 CountPanelUI가 가지고 있다가
         // submit혹은 cancel할때 해당 함수를 호출한다.
-        countPanel.Open((count, isSubmit) => {
+        countPanel.Open(item, (count, isSubmit) => {
 
             // count : 선택한 개수, isSubmit : 선택, 취소 여부.
             if (isSubmit)

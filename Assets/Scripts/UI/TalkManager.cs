@@ -8,6 +8,7 @@ public class TalkManager : Singleton<TalkManager>
     [SerializeField] RectTransform talkRect;
     [SerializeField] RectTransform downPivot;
     [SerializeField] Text talkText;
+    [SerializeField] Animation talkCursor;
 
     Vector3 originPosition;     // 나타나는 위치.
     Vector3 hidePosition;       // 숨는 위치.
@@ -23,6 +24,7 @@ public class TalkManager : Singleton<TalkManager>
         // 최초 시작시에는 숨는 위치에 이동.
         talkRect.position = hidePosition;
         talkText.text = string.Empty;
+        talkCursor.gameObject.SetActive(false);
     }
 
     public void Talk(string[] comments)
@@ -88,6 +90,7 @@ public class TalkManager : Singleton<TalkManager>
 
     IEnumerator TextAnimation(string str)
     {
+        // 미리 만들어두고 캐싱해서 쓴다.
         WaitForSeconds wait = new WaitForSeconds(0.03f);
 
         talkText.text = string.Empty;
@@ -103,8 +106,14 @@ public class TalkManager : Singleton<TalkManager>
     }
     IEnumerator Waitting()
     {
+        // 기다릴 때는 커서 애니메이팅을 켠다.
+        talkCursor.gameObject.SetActive(true);
+
         isClick = false;
         while (!isClick)                // 유저의 입력이 들어오기 전까지 반복.
             yield return null;          // 한 프레임 대기.
+
+        // 커서 애니메이션 종료.
+        talkCursor.gameObject.SetActive(false);             
     }
 }

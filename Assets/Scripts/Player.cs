@@ -48,22 +48,25 @@ public class Player : Singleton<Player>
         }
     }
 
+    const string EXCEPT_ENVIROMENT = "Enviroment";
+    const string EXCEPT_OBJECT = "Object";
+
     private void OnSubmit()
     {
         if (isMoving)
             return;
 
-        Collider2D node = RayToVector(beforeInput);
+        Collider2D node = RayToVector(beforeInput, EXCEPT_ENVIROMENT, EXCEPT_OBJECT);       
         if (node == null)
             return;
-
+        
         IInteraction target = node.GetComponent<IInteraction>();
         if (target != null)
             target.Interaction();
     }
     private void OnCancel()
     {
-
+        MenuManager.Instance.OpenMenu();
     }
     private void OnMovement(VECTOR input)
     {
@@ -117,9 +120,18 @@ public class Player : Singleton<Player>
         beforeInput = vector;
     }
 
-    private Collider2D RayToVector(VECTOR vector)
+    private Collider2D RayToVector(VECTOR vector, params string[] excepts)
     {
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, vectors[(int)vector], 1f);
+        LayerMask mask = int.MaxValue;      // 모든 레이어를 포함.
+
+        for(int i = 0; i<excepts.Length; i++)
+        {            
+            int layer = 1 << LayerMask.NameToLayer(excepts[i]); // LayerMask.NameToLayer(string) : int   => 레이어의 순번.
+            mask ^= layer;                                      // XOR연산. 1 xor 1 = 0. => 해당하는 값을 제거할 때 사용.
+        }
+
+        // mask에 해당하는 오브젝트만 충돌한다.
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, vectors[(int)vector], 1f, mask);
         return hit.collider;
     }
 }

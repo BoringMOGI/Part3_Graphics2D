@@ -10,13 +10,18 @@ public class CountPanelUI : MonoBehaviour
     CountEvent Callback;
 
     [SerializeField] Text countText;
+    [SerializeField] Text totalPriceText;
+    [SerializeField] Animation totalPriceAnim;
 
     const int MIN_COUNT = 1;
     const int MAX_COUNT = 99;
     int count = 1;
 
-    public void Open(CountEvent Callback)
+    Item item;
+
+    public void Open(Item item, CountEvent Callback)
     {
+        this.item = item;
         this.Callback = Callback;
 
         InputManager.Instance.OnInputUp += OnInputUp;
@@ -27,6 +32,7 @@ public class CountPanelUI : MonoBehaviour
         countText.text = count.ToString();
 
         gameObject.SetActive(true);
+        UpdateTotalPrice();
     }
     private void Close()
     {
@@ -58,11 +64,22 @@ public class CountPanelUI : MonoBehaviour
 
         count = Mathf.Clamp(count, MIN_COUNT, MAX_COUNT);
         countText.text = count.ToString();
+        UpdateTotalPrice();
     }
     private void OnSubmit()
-    {        
-        Callback(count, true);          // 결과 값 전달.
-        Close();
+    {
+        int totalPrice = item.itemPrice * count;
+        bool isEnough = Inventory.Instance.IsEnoughCoin(totalPrice);
+
+        if (isEnough)
+        {
+            Callback(count, true);          // 결과 값 전달.
+            Close();
+        }
+        else
+        {
+            totalPriceAnim.Play("Blink");
+        }
     }
     private void OnCancel()
     {        
@@ -70,6 +87,13 @@ public class CountPanelUI : MonoBehaviour
         Close();
     }
 
+    private void UpdateTotalPrice()
+    {
+        int totalPrice = item.itemPrice * count;
+        totalPriceText.text = string.Format("{0:#,##0}", totalPrice);
 
+        bool isEnough = Inventory.Instance.IsEnoughCoin(totalPrice);
+        totalPriceText.color = isEnough ? Color.white : Color.red;
+    }
 
 }
