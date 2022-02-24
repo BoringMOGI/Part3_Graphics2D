@@ -7,6 +7,6 @@ public class ShopNPC : NPC
     public override void Interaction()
     {
         //Debug.Log("상점 구매창 열기");
-        ShopManager.Instance.OpenShop();
+        ShopManager.Instance.Open();
     }
 }

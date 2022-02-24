@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class CountPanelUI : MonoBehaviour
+public class CountPanelUI : MonoBehaviour, IMobileInput
 {
     // 선택한 수량과 결정,취소 여부.
     public delegate void CountEvent(int count, bool isSubmit);
@@ -24,9 +24,7 @@ public class CountPanelUI : MonoBehaviour
         this.item = item;
         this.Callback = Callback;
 
-        InputManager.Instance.OnInputUp += OnInputUp;
-        InputManager.Instance.OnSubmit += OnSubmit;
-        InputManager.Instance.OnCancel += OnCancel;
+        InputManager.Instance.RegestedEventer(this);
 
         count = 1;
         countText.text = count.ToString();
@@ -36,15 +34,15 @@ public class CountPanelUI : MonoBehaviour
     }
     private void Close()
     {
-        InputManager.Instance.OnInputUp -= OnInputUp;
-        InputManager.Instance.OnSubmit -= OnSubmit;
-        InputManager.Instance.OnCancel -= OnCancel;
-
+        InputManager.Instance.ReleaseEventer();
         gameObject.SetActive(false);
     }
 
-    private void OnInputUp(VECTOR v)
+    public void InputVector(VECTOR v, bool isDown)
     {
+        if (isDown)
+            return;
+
         if(v == VECTOR.Left)
         {
             count -= 1;
@@ -66,7 +64,7 @@ public class CountPanelUI : MonoBehaviour
         countText.text = count.ToString();
         UpdateTotalPrice();
     }
-    private void OnSubmit()
+    public void Submit()
     {
         int totalPrice = item.itemPrice * count;
         bool isEnough = Inventory.Instance.IsEnoughCoin(totalPrice);
@@ -81,7 +79,7 @@ public class CountPanelUI : MonoBehaviour
             totalPriceAnim.Play("Blink");
         }
     }
-    private void OnCancel()
+    public void Cancel()
     {        
         Callback(-1, false);            // 결과 값 전달.
         Close();

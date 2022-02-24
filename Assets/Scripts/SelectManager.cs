@@ -42,7 +42,6 @@ public abstract class Button : MonoBehaviour, IButtonHandler
                 break;
         }
     }
-
     public Button GetButtonOf(VECTOR v)
     {
         switch (v)
@@ -63,29 +62,11 @@ public abstract class Button : MonoBehaviour, IButtonHandler
     public abstract void OnSelect();
     public abstract void OnSubmit();
 }
-
-public class SelectManager<T> : Singleton<T>
+public abstract class SelectManager<T> : Singleton<T>, IMobileInput
     where T : MonoBehaviour
 {
     protected Button current;
 
-    protected void SwitchInputEvent(bool isUnlock)
-    {
-        if(isUnlock)
-        {
-            // 입력 매니저에게 자신의 이벤트 함수 등록.
-            InputManager.Instance.OnInputUp += MoveButton;
-            InputManager.Instance.OnSubmit += SubmitButton;
-            InputManager.Instance.OnCancel += CancelButton;
-        }
-        else
-        {
-            // 입력 매니저에게 자신의 이벤트 함수 등록 해제.
-            InputManager.Instance.OnInputUp -= MoveButton;
-            InputManager.Instance.OnSubmit -= SubmitButton;
-            InputManager.Instance.OnCancel -= CancelButton;
-        }
-    }
     protected virtual void SetButton(Button target)
     {
         if (target == null)
@@ -107,9 +88,11 @@ public class SelectManager<T> : Singleton<T>
         current = null;
     }
 
-    protected virtual void MoveButton(VECTOR v)
+    // 인터페이스 구현.
+    public virtual void InputVector(VECTOR v, bool isDown)
     {
-        if (current == null)
+        // 현재 선택중인 버튼이 없거나 버튼 up이 아니라면 return.
+        if (current == null || isDown)
             return;
 
         // vector에 해당하는 다음 버튼이 있다면
@@ -120,7 +103,7 @@ public class SelectManager<T> : Singleton<T>
             SetButton(nextButton);
         }
     }
-    protected virtual void SubmitButton()
+    public virtual void Submit()
     {
         if (current == null)
             return;
@@ -128,7 +111,21 @@ public class SelectManager<T> : Singleton<T>
         // 클릭.
         current.OnSubmit();
     }
-    protected virtual void CancelButton()
+    public virtual void Cancel()
+    {
+        OnCancel();
+    }
+
+    public virtual void Open()
+    {
+        InputManager.Instance.RegestedEventer(this);
+    }
+    public virtual void Close()
+    {
+        InputManager.Instance.ReleaseEventer();
+    }
+
+    protected virtual void OnCancel()
     {
 
     }

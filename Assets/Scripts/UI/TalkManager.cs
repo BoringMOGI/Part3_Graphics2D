@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class TalkManager : Singleton<TalkManager>
+public class TalkManager : Singleton<TalkManager>, IMobileInput
 {
     [SerializeField] RectTransform talkRect;
     [SerializeField] RectTransform downPivot;
@@ -31,9 +31,7 @@ public class TalkManager : Singleton<TalkManager>
     { 
         this.comments = comments;
 
-        Player.Instance.SwitchControl(false);               // 플레이어 입력 이벤트 제거.
-        InputManager.Instance.OnSubmit += OnSubmit;         // 확인 이벤트 등록.
-        InputManager.Instance.OnCancel += OnCancel;         // 취소 이벤트 등록.
+        InputManager.Instance.RegestedEventer(this);        // 입력 매니저에게 나를 등록.
         talkText.text = string.Empty;                       // 기존에 있던 텍스트 제거.
 
         // 코루틴 실행.
@@ -42,18 +40,19 @@ public class TalkManager : Singleton<TalkManager>
     }
     private void Close()
     {
-        Player.Instance.SwitchControl(true);                // 플레이어 입력 이벤트 등록.
-        InputManager.Instance.OnSubmit -= OnSubmit;         // 확인 이벤트 제거.
-        InputManager.Instance.OnCancel -= OnCancel;         // 취소 이벤트 제거.
-
+        InputManager.Instance.ReleaseEventer();             // 입력 매니저에게 나를 등록 해제.
         StartCoroutine(MovePanel(true));
     }
 
-    private void OnSubmit()
+    public void InputVector(VECTOR vector, bool isDown)
+    {
+
+    }
+    public void Submit()
     {
         isClick = true;
     }
-    private void OnCancel()
+    public void Cancel()
     {
 
     }

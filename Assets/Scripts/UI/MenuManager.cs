@@ -25,29 +25,35 @@ public class MenuManager : SelectManager<MenuManager>
             menuButtons[i].Setup((MENU)i, OnSelectedMenu);
     }
 
-    public void OpenMenu()
+    public override void Open()
     {
+        base.Open();
+
         menuAnim.Play(KEY_SHOW);                // 등장 애니메이션 출력.
         SetButton(menuButtons[0]);              // 최초 버튼 선택.
-        Player.Instance.SwitchControl(false);   // 플레이어 컨트롤 제거.
-        SwitchInputEvent(true);                 // 나의 이벤트 등록.
     }
-    private void CloseMenu()
-    {       
-        SwitchInputEvent(false);                // 나의 이벤트 해제.
-        Player.Instance.SwitchControl(true);    // 플레이어 컨트롤 등록.
+    public override void Close()
+    {
+        base.Close();
+
         ClearButton();                          // 선택 버튼 해제.
         menuAnim.Play(KEY_CLOSE);               // 퇴장 애니메이션 출력.
     }
 
     private void OnSelectedMenu(MENU menu)
     {
-        Debug.Log("메뉴가 선택 되었다 : " + menu);
-        CloseMenu();
+        Close();
+
+        switch (menu)
+        {
+            case MENU.Inventory:
+                InventoryUI.Instance.Open();
+                break;
+        }
     }
 
-    protected override void CancelButton()
+    protected override void OnCancel()
     {
-        CloseMenu();
+        Close();
     }
 }

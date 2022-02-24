@@ -11,7 +11,7 @@ public enum VECTOR
     Right,
 }
 
-public class Player : Singleton<Player>
+public class Player : Singleton<Player>, IMobileInput
 {
     readonly Vector2[] vectors = new Vector2[] {
        Vector2.up,
@@ -29,29 +29,13 @@ public class Player : Singleton<Player>
     void Start()
     {
         anim = GetComponent<Animator>();
-        SwitchControl(true);
-    }
-
-    public void SwitchControl(bool isUnlock)
-    {
-        if (isUnlock)
-        {
-            InputManager.Instance.OnInputDown += OnMovement;
-            InputManager.Instance.OnSubmit += OnSubmit;
-            InputManager.Instance.OnCancel += OnCancel;            
-        }
-        else
-        {
-            InputManager.Instance.OnInputDown -= OnMovement;
-            InputManager.Instance.OnSubmit -= OnSubmit;
-            InputManager.Instance.OnCancel -= OnCancel;
-        }
+        InputManager.Instance.RegestedEventer(this);        // 이벤트 매니저에 나를 등록시킨다.
     }
 
     const string EXCEPT_ENVIROMENT = "Enviroment";
     const string EXCEPT_OBJECT = "Object";
 
-    private void OnSubmit()
+    public void Submit()
     {
         if (isMoving)
             return;
@@ -64,11 +48,11 @@ public class Player : Singleton<Player>
         if (target != null)
             target.Interaction();
     }
-    private void OnCancel()
+    public void Cancel()
     {
-        MenuManager.Instance.OpenMenu();
+        MenuManager.Instance.Open();
     }
-    private void OnMovement(VECTOR input)
+    public void InputVector(VECTOR input, bool isDown)
     {
         if (isMoving)
             return;

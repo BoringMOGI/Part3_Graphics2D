@@ -27,26 +27,23 @@ public class ShopManager : SelectManager<ShopManager>
         countPanel.gameObject.SetActive(false);
     }
 
-    public void OpenShop()
+    public override void Open()
     {
+        base.Open();
+
         CreateItems();                                      // 상점에 맞는 아이템 생성.
         LinkedItems();                                      // 생성된 아이템들을 링크 시킨다.
 
-        Player.Instance.SwitchControl(false);               // 플레이어 입력 해제.
-        SwitchInputEvent(true);                             // 입력 이벤트 활성화.
-
         SetButton(shopItemList[0]);                         // 최초 선택 버튼 세팅.
-
         panel.SetActive(true);                              // 패널 활성화.
     }
-    public void CloseShop()
+    public override void Close()
     {
+        base.Close();
+
         panel.SetActive(false);                             // 패널 해제.
 
         ClearButton();                                      // 버튼 선택 해제.
-        SwitchInputEvent(false);                            // 입력 이벤트 활성화.
-        Player.Instance.SwitchControl(true);                // 플레이어 입력 재등록.
-
         ClearItems();                                       // 아이템 UI 삭제.
     }
 
@@ -88,9 +85,11 @@ public class ShopManager : SelectManager<ShopManager>
         shopItemList.Clear();
     }
     
-    protected override void MoveButton(VECTOR v)
+    public override void InputVector(VECTOR v, bool isDown)
     {
-        base.MoveButton(v);
+        base.InputVector(v, isDown);
+        if (isDown)
+            return;
 
         // 상점 목록의 높이 갱신.
         float viewHeight = scrollView.rect.height;
@@ -106,9 +105,6 @@ public class ShopManager : SelectManager<ShopManager>
     }
     private void OnSubmitShopItem(Item item)
     {
-        // 상점 매니저의 이벤트 비활성화.
-        SwitchInputEvent(false);                    
-
         // 매개변수는 무명 메소드(함수)로써 CountPanelUI가 가지고 있다가
         // submit혹은 cancel할때 해당 함수를 호출한다.
         countPanel.Open(item, (count, isSubmit) => {
@@ -116,14 +112,14 @@ public class ShopManager : SelectManager<ShopManager>
             // count : 선택한 개수, isSubmit : 선택, 취소 여부.
             if (isSubmit)
             {
-                Debug.Log("구매 가격 : " + item.itemPrice * count);
+                int price = item.itemPrice * count;     // 구매 가격 계산.
+                Inventory.Instance.UseCoin(price);      // 코인 사용.
+                Inventory.Instance.PushItem(item);      // 아이템 인벤토리에 대입.
             }
             else
             {
                 Debug.Log("아이템 구매 취소");
             }
-
-            SwitchInputEvent(true);                 // 상점 매니저의 이벤트 활성화.
         });
     }
 
@@ -138,12 +134,10 @@ public class ShopManager : SelectManager<ShopManager>
         {
             Debug.Log("아이템 구매 취소");
         }
-
-        SwitchInputEvent(true);                 // 상점 매니저의 이벤트 활성화.
     }
 
-    protected override void CancelButton()
+    protected override void OnCancel()
     {
-        CloseShop();
+        Close();
     }
 }
