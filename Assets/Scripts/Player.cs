@@ -9,7 +9,14 @@ public enum VECTOR
     Down,
     Left,
     Right,
+    Centor,
 }
+
+interface ITrigger
+{
+    void Trigger(Player player);
+}
+
 
 public class Player : Singleton<Player>, IMobileInput
 {
@@ -17,7 +24,8 @@ public class Player : Singleton<Player>, IMobileInput
        Vector2.up,
        Vector2.down,
        Vector2.left,
-       Vector2.right
+       Vector2.right,
+       Vector2.zero,
     };
 
     [SerializeField] float moveSpeed = 5f;
@@ -72,7 +80,7 @@ public class Player : Singleton<Player>, IMobileInput
     private IEnumerator Movement(VECTOR vector)
     {
         // 도착지점을 계산 후 이동.
-        if (RayToVector(vector) == null)
+        if (RayToVector(vector, "Trigger") == null)
         {
             Vector2 myPosition = transform.position;
             Vector3 destination = myPosition + vectors[(int)vector];
@@ -91,16 +99,24 @@ public class Player : Singleton<Player>, IMobileInput
         Collider2D collider = RayToVector(vector);
         if (collider != null)
         {
-            IInteraction target = collider.GetComponent<IInteraction>();
-
             // 상호작용 타겟이 존재한다면 해당 타겟의 이름을 출력.
+            IInteraction target = collider.GetComponent<IInteraction>();
             if (target != null)
-                InteractionUI.Instance.Open(target.GetName());
+                InteractionUI.Instance.Open(target.GetName());                        
         }
 
-        isMoving = false;
+        // 내 발 밑에 트리거가 존재하는지 체크.
+        collider = RayToVector(VECTOR.Centor);
+        if (collider != null)
+        {
+            ITrigger trigger = collider.GetComponent<ITrigger>();
+            if (trigger != null)
+                trigger.Trigger(this);
+        }
+
 
         // 종료 후 이전 방향 대입.
+        isMoving = false;                
         beforeInput = vector;
     }
 
@@ -115,7 +131,10 @@ public class Player : Singleton<Player>, IMobileInput
         }
 
         // mask에 해당하는 오브젝트만 충돌한다.
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, vectors[(int)vector], 1f, mask);
+        Vector2 dir = vectors[(int)vector];                     // 방향.
+        Vector3 origin = transform.position + (Vector3)dir;     // 기준점.
+        
+        RaycastHit2D hit = Physics2D.Raycast(origin, dir, .1f, mask);
         return hit.collider;
     }
 }

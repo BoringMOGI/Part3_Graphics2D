@@ -17,9 +17,9 @@ public class CountPanelUI : MonoBehaviour, IMobileInput
     const int MAX_COUNT = 99;
     int count = 1;
 
-    Item item;
+    ItemData item;
 
-    public void Open(Item item, CountEvent Callback)
+    public void Open(ItemData item, CountEvent Callback)
     {
         this.item = item;
         this.Callback = Callback;

@@ -7,6 +7,7 @@ public class InvItemUI : Button
 {
     [SerializeField] Image iconImage;
     [SerializeField] Image selected;
+    [SerializeField] Text countText;
 
     public delegate void ItemEvent(Item item);
     
@@ -14,7 +15,7 @@ public class InvItemUI : Button
     public event ItemEvent OnSubmitItem;                // 아이템을 사용했을 때.
 
     Item item;
-
+    
     public void Setup(Item item)
     {
         this.item = item;
@@ -22,6 +23,7 @@ public class InvItemUI : Button
         // 아이콘 이미지 갱신.
         iconImage.enabled = (item != null);
         iconImage.sprite = (item != null) ? item.itemSprite : null;
+        countText.text = (item == null || item.count <= 1) ? string.Empty : item.count.ToString();
 
         OnDeselect();
     }
@@ -35,7 +37,6 @@ public class InvItemUI : Button
         selected.enabled = true;
         OnSelectedItem?.Invoke(item);
     }
-
     public override void OnSubmit()
     {
         OnSubmitItem?.Invoke(item);

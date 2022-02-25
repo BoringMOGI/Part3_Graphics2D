@@ -62,15 +62,17 @@ public class InventoryUI : SelectManager<InventoryUI>
     {
         base.Open();
 
-        OnUpdateItem();         // 내부 아이템 데이터 업데이트.
-        SetButton(items[0]);    // 최초 선택 버튼.
-
-        panel.SetActive(true);  // panel 활성화.
+        OnUpdateItem();                                 // 내부 아이템 데이터 업데이트.
+        SetButton(items[0]);                            // 최초 선택 버튼.
+        
+        panel.SetActive(true);                          // panel 활성화.                
     }
     public override void Close()
     {
         base.Close();
-        panel.SetActive(false); // panel 비활성화.
+
+        TalkManager.Instance.Close(false);              // 출력 창 비활성화 (단, 출력창의 이벤트 비활성화 부분은 제외)
+        panel.SetActive(false);                         // panel 비활성화.
     }
 
     private void OnUpdateItem()
@@ -84,7 +86,12 @@ public class InventoryUI : SelectManager<InventoryUI>
     private void OnSelectedItem(Item item)
     {
         if (item == null)
+        {
+            TalkManager.Instance.TextOutput(string.Empty);
             return;
+        }
+
+        TalkManager.Instance.TextOutput(item.itemContent);
     }
     private void OnSubmitItem(Item item)
     {
@@ -94,7 +101,7 @@ public class InventoryUI : SelectManager<InventoryUI>
             return;
         }
 
-        Debug.Log("선택 중인 아이템은 : " + item.itemName);
+        TalkManager.Instance.TextOutput($"{item.itemName}은 사용할 수 없습니다.");
     }
 
     protected override void OnCancel()

@@ -25,6 +25,40 @@ public class InputManager : Singleton<InputManager>
         eventers.Pop();
     }
 
+
+    readonly KeyCode[] arrowKeys = new KeyCode[] {
+        KeyCode.UpArrow,
+        KeyCode.DownArrow,
+        KeyCode.LeftArrow, 
+        KeyCode.RightArrow 
+    };
+
+#if UNITY_EDITOR
+    private void Update()
+    {
+        for(int i = 0; i<arrowKeys.Length; i++)
+        {
+            if (Input.GetKeyDown(arrowKeys[i]))
+                InputUp((VECTOR)i);
+        }
+
+        for(int i = 0; i<arrowKeys.Length; i++)
+        {
+            if (Input.GetKey(arrowKeys[i]))
+                InputDown((VECTOR)i);
+        }
+
+        if(Input.GetKeyDown(KeyCode.Return))
+        {
+            Submit();
+        }
+        if(Input.GetKeyDown(KeyCode.Escape))
+        {
+            Cancel();
+        }
+    }
+#endif
+
     // 등록된 이벤트 함수 호출.
     public void InputDown(VECTOR vector)
     {
@@ -39,7 +73,6 @@ public class InputManager : Singleton<InputManager>
         if (target != null)
             target.InputVector(vector, false);
     }
-
     public void Submit()
     {
         // 선택 이벤트 호출.

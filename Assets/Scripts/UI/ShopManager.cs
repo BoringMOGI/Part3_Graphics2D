@@ -17,7 +17,7 @@ public class ShopManager : SelectManager<ShopManager>
     [SerializeField] RectTransform content;
 
     [Header("ItemData")]
-    [SerializeField] Item[] buyItems;
+    [SerializeField] ItemData[] buyItems;
 
     List<ShopItem> shopItemList = new List<ShopItem>();
 
@@ -45,6 +45,8 @@ public class ShopManager : SelectManager<ShopManager>
 
         ClearButton();                                      // 버튼 선택 해제.
         ClearItems();                                       // 아이템 UI 삭제.
+
+        TalkManager.Instance.Close(false);                  // 출력창 끄기.
     }
 
     private void CreateItems()
@@ -52,9 +54,15 @@ public class ShopManager : SelectManager<ShopManager>
         // butItems의 데이터 만큼 아이템 생성.
         for (int i = 0; i < buyItems.Length; i++)
         {
+            // 프리팹 생성 및 세팅.
             ShopItem newItem = Instantiate(prefab);
-            newItem.Setup(buyItems[i], OnSubmitShopItem);
+            newItem.Setup(buyItems[i]);
 
+            // 이벤트 함수 등록.
+            newItem.OnSelectedItem += OnSelectedShopItem;
+            newItem.OnSubmitItem += OnSubmitShopItem;
+
+            // 위치, 크기 계산.
             RectTransform itemRect = newItem.transform as RectTransform;
             itemRect.SetParent(itemParent);
             itemRect.localScale = new Vector3(1, 1, 1);
@@ -103,7 +111,12 @@ public class ShopManager : SelectManager<ShopManager>
         localPosition.y = contentY;
         content.transform.localPosition = localPosition;
     }
-    private void OnSubmitShopItem(Item item)
+
+    private void OnSelectedShopItem(ItemData item)
+    {
+        TalkManager.Instance.TextOutput(item.itemContent);
+    }
+    private void OnSubmitShopItem(ItemData item)
     {
         // 매개변수는 무명 메소드(함수)로써 CountPanelUI가 가지고 있다가
         // submit혹은 cancel할때 해당 함수를 호출한다.
@@ -112,9 +125,9 @@ public class ShopManager : SelectManager<ShopManager>
             // count : 선택한 개수, isSubmit : 선택, 취소 여부.
             if (isSubmit)
             {
-                int price = item.itemPrice * count;     // 구매 가격 계산.
-                Inventory.Instance.UseCoin(price);      // 코인 사용.
-                Inventory.Instance.PushItem(item);      // 아이템 인벤토리에 대입.
+                int price = item.itemPrice * count;             // 구매 가격 계산.
+                Inventory.Instance.UseCoin(price);              // 코인 사용.
+                Inventory.Instance.PushItem(item, count);       // 아이템 인벤토리에 대입.
             }
             else
             {
@@ -122,7 +135,6 @@ public class ShopManager : SelectManager<ShopManager>
             }
         });
     }
-
     private void SelectedCount(int count, bool isSubmit)
     {
         // count : 선택한 개수, isSubmit : 선택, 취소 여부.

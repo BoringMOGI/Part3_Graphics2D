@@ -13,15 +13,16 @@ public class ShopItem : Button
     [SerializeField] Text ownedText;        // 보유 개수.
     [SerializeField] Text priceText;        // 가격.
 
-    Item itemData;
+    ItemData itemData;
 
-    public delegate void SubmitEvent(Item item);
-    private SubmitEvent OnSubmitItem;
+    public delegate void ItemEvent(ItemData item);
 
-    public void Setup(Item itemData, SubmitEvent OnSubmitItem)
+    public event ItemEvent OnSelectedItem;
+    public event ItemEvent OnSubmitItem;
+
+    public void Setup(ItemData itemData)
     {
         this.itemData = itemData;
-        this.OnSubmitItem = OnSubmitItem;
 
         itemImage.sprite = itemData.itemSprite;
         nameText.text = itemData.itemName;
@@ -34,6 +35,7 @@ public class ShopItem : Button
     public override void OnSelect()
     {
         selectedImage.enabled = true;
+        OnSelectedItem?.Invoke(itemData);       // 상점 매니저(=이벤트 등록자)에게 자신이 선택되었다고 알린다.
     }
     public override void OnDeselect()
     {
@@ -41,6 +43,6 @@ public class ShopItem : Button
     }
     public override void OnSubmit()
     {
-        OnSubmitItem.Invoke(itemData);          // 상점 매니저에게 자신이 선택되었다고 알린다.
+        OnSubmitItem?.Invoke(itemData);          // 상점 매니저에게 자신이 구매 시도되었다고 알린다.
     }
 }

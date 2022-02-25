@@ -3,6 +3,24 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 
+public class Item
+{
+    private ItemData data;
+    public Item(ItemData data, int count)
+    {
+        this.data = data;
+        this.count = count;
+    }
+
+    public string itemName => data.itemName;
+    public string itemType => data.itemType;
+    public string itemContent => data.itemContent;
+    public Sprite itemSprite => data.itemSprite;
+    public int itemPrice => data.itemPrice;
+
+    public int count;
+}
+
 public class Inventory : Singleton<Inventory>
 {
     const int MAX_INVENTORY = 36;
@@ -57,12 +75,12 @@ public class Inventory : Singleton<Inventory>
         return -1;
     }
 
-    public bool PushItem(Item newItem)      // 성공적으로 인벤토리에 넣었는지 리턴.
+    public bool PushItem(ItemData newItem, int count)       // 성공적으로 인벤토리에 넣었는지 리턴.
     {
-        int index = IndexOfNull();          // 비어있는 공간 체크.
-        if (index >= 0)                     // 만약 꽉 차있지 않다면.
+        int index = IndexOfNull();                          // 비어있는 공간 체크.
+        if (index >= 0)                                     // 만약 꽉 차있지 않다면.
         {
-            inventory[index] = newItem;     // 해당 위치에 newItem 대입.
+            inventory[index] = new Item(newItem, count);    // 해당 위치에 newItem 대입.
             return true;
         }
 

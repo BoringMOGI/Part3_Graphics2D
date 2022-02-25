@@ -27,6 +27,18 @@ public class TalkManager : Singleton<TalkManager>, IMobileInput
         talkCursor.gameObject.SetActive(false);
     }
 
+    Coroutine beforeOutput;
+    public void TextOutput(string content)
+    {
+        // InputManager.Instance.RegestedEventer(this);         // 단순히 출력만 해주기 때문에 입력 이벤트 등록 X.
+        talkText.text = string.Empty;                           // 기존에 있던 텍스트 제거.
+        talkRect.position = originPosition;                     // 패널의 위치 이동.            
+
+        if (beforeOutput != null)                               // 이전에 돌아가는 코루틴이 있으면,
+            StopCoroutine(beforeOutput);                        // 중단.
+
+        beforeOutput = StartCoroutine(TextAnimation(content));  // 새로운 코루틴 실행.
+    }
     public void Talk(string[] comments)
     { 
         this.comments = comments;
@@ -38,11 +50,14 @@ public class TalkManager : Singleton<TalkManager>, IMobileInput
         // 매개 변수로 무명 메소드 전달 (=람다식)
         StartCoroutine(MovePanel(false, () => StartCoroutine(Talk())));
     }
-    private void Close()
+    public void Close(bool isReleaseEvent = true)
     {
-        InputManager.Instance.ReleaseEventer();             // 입력 매니저에게 나를 등록 해제.
+        if(isReleaseEvent)
+            InputManager.Instance.ReleaseEventer();             // 입력 매니저에게 나를 등록 해제.
+
         StartCoroutine(MovePanel(true));
     }
+
 
     public void InputVector(VECTOR vector, bool isDown)
     {
